@@ -10,7 +10,8 @@ static char	*read_file(int fd)
 		return (NULL);
 	bytes_read = read(fd, tmp_buffer, BUFFER_SIZE);
 	if(bytes_read <= 0)
-		return (free (tmp_buffer), NULL);
+		return (free(tmp_buffer), NULL);
+	tmp_buffer[bytes_read] = '\0';
 	return tmp_buffer;
 }
 
@@ -28,7 +29,7 @@ static char *extract_line(char *static_buf)
 		line_len = newline - static_buf + 1;
 	else 
 		line_len = ft_strlen(static_buf);
-	line = malloc(sizeof(char) * (line_len));
+	line = malloc(sizeof(char) * (line_len + 1));
 	if(!line)
 		return (NULL);
 	i = 0;
@@ -50,17 +51,17 @@ static char *update_rest(char *static_buf)
 		return (NULL);
 	newline = ft_strchr(static_buf, '\n');
 	if (!newline)
-		return (NULL);
+		return (free(static_buf), NULL);
 	start = newline + 1;
 	rest_size = ft_strlen(start);
 	rest = malloc(sizeof(char) * (rest_size + 1));
 	if (!rest)
-		return (NULL);
+		return (free(static_buf), NULL);
 	i = 0;
 	while (*start)
 		rest[i++] = *start++; 
 	rest[i] = '\0';
-	return (rest);
+	return (free(static_buf), rest);
 }
 
 char *get_next_line(int fd)
@@ -69,8 +70,10 @@ char *get_next_line(int fd)
     char        *tmp;
     char        *line;
 
-    while (ft_strchr(static_buf, '\n') == NULL)
-    {
+	if(fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
+	while (ft_strchr(static_buf, '\n') == NULL)
+	{
         tmp = read_file(fd);
         if (tmp == NULL)
             break ;

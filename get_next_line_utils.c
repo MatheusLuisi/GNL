@@ -17,7 +17,7 @@ char	*ft_strchr(char *s, int c)
 	int i;
 
 	if(!s)
-		return (0);
+		return (NULL);
 	i = 0;
 	while (s[i] != '\0')
 	{
@@ -43,14 +43,14 @@ char	*ft_strjoin(char *s1, char *s2)
 	s2_len = ft_strlen(s2);
 	s3 = malloc(sizeof(char) * (s1_len + s2_len + 1));
 	if (!s3)
-		return(NULL);
+		return(free(s1), NULL);
 	i = 0;
 	while (*s1)
 		s3[i++] = *s1++;
 	while (*s2)
 		s3[i++] = *s2++;
 	s3[i] = '\0';
-	return (s3);
+	return (free(s1), s3);
 }
 
 

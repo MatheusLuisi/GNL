@@ -1,6 +1,6 @@
 #include "get_next_line.h"
 
-size_t	ft_strlen(char *s)
+size_t	ft_strlen(const char *s)
 {
 	size_t	len;
 
@@ -30,10 +30,9 @@ char	*ft_strchr(char *s, int c)
 	return (NULL);
 }
 
-char	*ft_strjoin(char *s1, char *s2)
+char	*ft_strjoin(const char *s1, const char *s2)
 {
 	size_t	i;
-	size_t	j;
 	char	*s3;
 
 	if (!s1 || !s2)
@@ -42,12 +41,10 @@ char	*ft_strjoin(char *s1, char *s2)
 	if (!s3)
 		return (NULL);
 	i = 0;
-	j = 0;
-	while (s1[j])
-		s3[i++] = s1[j++];
-	j = 0;
-	while (s2[j])
-		s3[i++] = s2[j++];
+	while (*s1)
+		s3[i++] = *s1++;
+	while (*s2)
+		s3[i++] = *s2++;
 	s3[i] = '\0';
 	return (s3);
 }

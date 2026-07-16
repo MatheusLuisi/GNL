@@ -47,18 +47,18 @@ static char	*extract_line(char *static_buf)
 
 static char	*update_rest(char *static_buf)
 {
-	char	*start;
+	char	*newline;
 	char	*rest;
 
 	if (!static_buf)
 		return (NULL);
-	start = ft_strchr(static_buf, '\n');
-	if (!start)
+	newline = ft_strchr(static_buf, '\n');
+	if (!newline || *(newline + 1) == '\0')
 	{
 		free(static_buf);
 		return (NULL);
 	}
-	rest = ft_strjoin("", ++start);
+	rest = ft_strjoin("", newline + 1);
 	free(static_buf);
 	return (rest);
 }
@@ -75,12 +75,20 @@ char	*get_next_line(int fd)
 	{
 		tmp = read_file(fd);
 		if (!tmp)
+		{
+			if (!static_buf)
+				return (NULL);
 			break ;
-		line = ft_strjoin(static_buf, tmp);
-		free(tmp);
-		if (static_buf)
+		}
+		if(!static_buf)
+				static_buf = ft_strjoin("", tmp);
+		else
+		{
+			line = ft_strjoin(static_buf, tmp);
 			free(static_buf);
-		static_buf = line;
+			static_buf = line;
+		}
+		free(tmp);
 	}
 	if (!static_buf)
 		return (NULL);
